@@ -4,57 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>人民英雄永垂不朽！！！</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      a {
-        text-decoration: none;
-      }
-      .wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        height: 100vh;
-        background-color: gray;
-      }
-      .wrapper p {
-        padding: 20px;
-        font-size: 40px;
-        text-shadow: 0px 2px 2px #cdd2cf;
-        text-indent: 2em;
-      }
-      button {
-        padding: 10px;
-        font-size: 14px;
-        border-radius: 4px;
-        background-color: gray;
-        border: #333 1px solid;
-        transition: all 0.4s;
-        cursor: pointer;
-        outline: none;
-      }
-      button:hover {
-        box-shadow: 0px 0px 0px 1px #333;
-      }
-      button:after {
-        content: "提示：灰度化图片过程可能会较长，请耐心等待，请选择非微信自带浏览器，推荐谷歌。";
-        position: absolute;
-        width: 300px;
-        /* top: calc(100% + (-350px)); */
-        top: 620px;
-        left: 818px;
-        font-size: 14px;
-        color: #333;
-      }
-      blockquote {
-        position: absolute;
-        top: calc(100% + (-60px));
-      }
-    </style>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="./gray.js"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -74,85 +25,35 @@
       <blockquote>
         死亡不是生命的终点，遗忘才是。
       </blockquote>
-    </div>
+      <script>
+        selectImage.addEventListener("click", function () {
+          input.click();
+        });
 
-    <script>
-      selectImage.addEventListener("click", function () {
-        input.click();
-      });
-
-      input.addEventListener("change", function () {
-        console.log("input.files[0]", input.files); // 是一个FileList
-        const file = input.files[0]; // 得到图片项
-        const imgName = file.name;
-        const reader = new FileReader(); // 创建file blob
-        reader.readAsDataURL(file);
-        reader.onload = function (_file) {
-          console.log("_file", _file);
-          const image = new Image();
-          image.src = _file.target.result;
-          image.onload = function () {
-            const a = document.createElement("a");
-            a.href = gray(image);
-            a.download = imgName;
-            a.setAttribute("id", "downloadGrayImage");
-            // 防止重复添加
-            if (!document.getElementById("downloadGrayImage")) {
-              document.body.appendChild(a);
-            }
-            a.click();
+        input.addEventListener("change", function () {
+          console.log("input.files[0]", input.files); // 是一个FileList
+          const file = input.files[0]; // 得到图片项
+          const imgName = file.name;
+          const reader = new FileReader(); // 创建file blob
+          reader.readAsDataURL(file);
+          reader.onload = function (_file) {
+            console.log("_file", _file);
+            const image = new Image();
+            image.src = _file.target.result;
+            image.onload = function () {
+              const a = document.createElement("a");
+              a.href = gray(image);
+              a.download = imgName;
+              a.setAttribute("id", "downloadGrayImage");
+              // 防止重复添加
+              if (!document.getElementById("downloadGrayImage")) {
+                document.body.appendChild(a);
+              }
+              a.click();
+            };
           };
-        };
-      });
-
-      // 灰度化算法
-      function gray(imgObj) {
-        const width = imgObj.width;
-        const height = imgObj.height;
-
-        const canvas = document.querySelector("canvas");
-        if (canvas.getContext) {
-          const context = canvas.getContext("2d");
-          canvas.width = width;
-          canvas.height = height;
-
-          context.drawImage(imgObj, 0, 0); //画一个图
-          // 获得隐含区域的像素数据, 返回ImageData 对象，其中的data属性包含了所需的数据
-          const imageData = context.getImageData(0, 0, width, height);
-          let pixelData = imageData.data;
-          console.log("pixelData", pixelData);
-
-          //重点来了，逐行遍历上述的像素数组
-          for (let h = 0; h < height; h++) {
-            for (let w = 0; w < width; w++) {
-              const i = h * 4 * width + w * 4;
-              const avgPixel =
-                (pixelData[i] + pixelData[i + 1] + pixelData[i + 2]) / 3; // 最简单的平均值算法
-
-              // 使用平均化的像素点去重新复制RGB三个值
-              pixelData[i] = avgPixel;
-              pixelData[i + 1] = avgPixel;
-              pixelData[i + 2] = avgPixel;
-            }
-          }
-
-          // 将重新赋值的像素点重新归位到context中
-          context.putImageData(
-            imageData,
-            0,
-            0,
-            0,
-            0,
-            imageData.width,
-            imageData.height
-          );
-
-          // 能变成图片的最重要的一步
-          return canvas.toDataURL(); //把当前构造的canvas对象变成img可使用的uri
-        } else {
-          console.error("抱歉，你的浏览器不支持");
-        }
-      }
-    </script>
+        });
+      </script>
+    </div>
   </body>
 </html>

@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: gray;
+}
+
+.wrapper p {
+  padding: 20px;
+  font-size: 40px;
+  text-shadow: 0px 2px 2px #cdd2cf;
+  text-indent: 2em;
+}
+
+button {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: gray;
+  border: #333 1px solid;
+  transition: all 0.4s;
+  cursor: pointer;
+  outline: none;
+}
+
+button:hover {
+  box-shadow: 0px 0px 0px 1px #333;
+}
+
+button:after {
+  content: "提示：灰度化图片过程可能会较长，请耐心等待，请选择非微信自带浏览器，推荐谷歌。";
+  position: absolute;
+  width: 300px;
+  /* top: calc(100% + (-350px)); */
+  top: 620px;
+  left: 700px;
+  font-size: 14px;
+  color: #333;
+}
+
+blockquote {
+  position: absolute;
+  top: calc(100% + (-60px));
+}
